@@ -1,4 +1,95 @@
-<div id="sidebar">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker Tycoon</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 280px;
+      background-color: #161b22;
+      padding: 20px;
+      border-right: 2px solid #30363d;
+      overflow-y: auto;
+    }
+
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1, h2 {
+      color: #58a6ff;
+      margin-bottom: 20px;
+    }
+
+    #click-btn {
+      background-color: #238636;
+      color: white;
+      padding: 20px 50px;
+      font-size: 22px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: background 0.3s;
+    }
+
+    #click-btn:hover {
+      background-color: #2ea043;
+    }
+
+    .stat {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .upgrade-btn {
+      background-color: #21262d;
+      color: #c9d1d9;
+      border: 2px solid #58a6ff;
+      padding: 12px;
+      margin: 10px 0;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 6px;
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .upgrade-btn:hover {
+      background-color: #30363d;
+    }
+
+    hr {
+      margin: 20px 0;
+      border-color: #30363d;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
     <h2>Upgrades</h2>
     <button class="upgrade-btn" onclick="buyUpgrade('juniorDev')">🧑‍💻 Junior Dev (+1/sec) - 50 LoC</button>
     <button class="upgrade-btn" onclick="buyUpgrade('gpuMiner')">💾 GPU Miner (+3/sec) - 200 LoC</button>
@@ -21,3 +112,105 @@
     <div class="stat">⚡ LoC/sec: <span id="locPerSec">0</span></div>
     <button id="click-btn" onclick="clickCode()">💡 Click to Write Code</button>
   </div>
+
+  <script>
+    let loc = 0;
+    let cryptons = 0;
+    let computers = 0;
+    let locPerSec = 0;
+
+    const upgrades = {
+      juniorDev: { cost: 50, rate: 1 },
+      gpuMiner: { cost: 200, rate: 3 },
+      autoScript: { cost: 1000, rate: 10 },
+      quantumServer: { cryptons: 10, rate: 100 }
+    };
+
+    function clickCode() {
+      loc++;
+      updateDisplay();
+    }
+
+    function buyUpgrade(type) {
+      const up = upgrades[type];
+      if (type === 'quantumServer') {
+        if (cryptons >= up.cryptons) {
+          cryptons -= up.cryptons;
+          locPerSec += up.rate;
+        }
+      } else {
+        if (loc >= up.cost) {
+          loc -= up.cost;
+          locPerSec += up.rate;
+        }
+      }
+      updateDisplay();
+    }
+
+    function buildComputer() {
+      if (loc >= 10000) {
+        loc -= 10000;
+        computers++;
+        updateDisplay();
+      }
+    }
+
+    function sellComputer() {
+      if (computers > 0) {
+        computers--;
+        cryptons++;
+        updateDisplay();
+      }
+    }
+
+    function updateDisplay() {
+      document.getElementById("loc").textContent = Math.floor(loc);
+      document.getElementById("cryptons").textContent = cryptons;
+      document.getElementById("computers").textContent = computers;
+      document.getElementById("locPerSec").textContent = locPerSec;
+    }
+
+    setInterval(() => {
+      loc += locPerSec / 10;
+      updateDisplay();
+    }, 100);
+
+    function saveGame() {
+      const saveData = {
+        loc,
+        cryptons,
+        computers,
+        locPerSec
+      };
+      localStorage.setItem('hackerTycoonSave', JSON.stringify(saveData));
+      alert("Game saved!");
+    }
+
+    function loadGame() {
+      const saveData = JSON.parse(localStorage.getItem('hackerTycoonSave'));
+      if (saveData) {
+        loc = saveData.loc || 0;
+        cryptons = saveData.cryptons || 0;
+        computers = saveData.computers || 0;
+        locPerSec = saveData.locPerSec || 0;
+        updateDisplay();
+        alert("Game loaded!");
+      } else {
+        alert("No save data found.");
+      }
+    }
+
+    function resetGame() {
+      if (confirm("Are you sure you want to reset your progress?")) {
+        loc = 0;
+        cryptons = 0;
+        computers = 0;
+        locPerSec = 0;
+        localStorage.removeItem('hackerTycoonSave');
+        updateDisplay();
+        alert("Game reset.");
+      }
+    }
+  </script>
+</body>
+</html>

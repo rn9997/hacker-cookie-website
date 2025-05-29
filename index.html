@@ -1,0 +1,23 @@
+<div id="sidebar">
+    <h2>Upgrades</h2>
+    <button class="upgrade-btn" onclick="buyUpgrade('juniorDev')">🧑‍💻 Junior Dev (+1/sec) - 50 LoC</button>
+    <button class="upgrade-btn" onclick="buyUpgrade('gpuMiner')">💾 GPU Miner (+3/sec) - 200 LoC</button>
+    <button class="upgrade-btn" onclick="buyUpgrade('autoScript')">⚙️ Auto Script (+10/sec) - 1000 LoC</button>
+    <button class="upgrade-btn" onclick="buyUpgrade('quantumServer')">🧠 Quantum Server (+100/sec) - 10 Cryptons</button>
+    <hr>
+    <button class="upgrade-btn" onclick="buildComputer()">🖥️ Build Computer (10,000 LoC)</button>
+    <button class="upgrade-btn" onclick="sellComputer()">💰 Sell Computer (1 = 1 Crypton)</button>
+    <hr>
+    <button class="upgrade-btn" onclick="saveGame()">💾 Save Game</button>
+    <button class="upgrade-btn" onclick="loadGame()">📂 Load Game</button>
+    <button class="upgrade-btn" onclick="resetGame()">🧹 Reset Game</button>
+  </div>
+
+  <div id="main">
+    <h1>💻 Hacker Tycoon</h1>
+    <div class="stat">📜 Lines of Code: <span id="loc">0</span></div>
+    <div class="stat">💰 Cryptons: <span id="cryptons">0</span></div>
+    <div class="stat">🖥️ Computers: <span id="computers">0</span></div>
+    <div class="stat">⚡ LoC/sec: <span id="locPerSec">0</span></div>
+    <button id="click-btn" onclick="clickCode()">💡 Click to Write Code</button>
+  </div>
